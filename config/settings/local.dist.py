@@ -9,6 +9,5 @@ DATABASES = {
         'PORT': '',
     }
 }
-DOMAIN_ADDRESS = ''
 SECRET_KEY = ''
 DEBUG = True
