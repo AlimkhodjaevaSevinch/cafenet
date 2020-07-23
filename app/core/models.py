@@ -28,13 +28,17 @@ class Food(models.Model):
 
 
 class Order(models.Model):
+    AWFUL = 'Awful' #ужасно
     BAD = 'Bad'
+    NORMAL = 'Normal'
+    GOOD = 'Good'
     EXCELLENT = 'Excellent'
+
     RATING_CHOICES = (
-        (1, BAD),
-        (2, ''),
-        (3, ''),
-        (4, ''),
+        (1, AWFUL),
+        (2, BAD),
+        (3, NORMAL),
+        (4, GOOD),
         (5, EXCELLENT)
     )
     BY_CARD = 'By card'
@@ -43,14 +47,28 @@ class Order(models.Model):
         (0, BY_CARD),
         (1, BY_CASH),
     )
+    ORDER_IS_ACCEPTED = 'Order is accepted' #заказ принят
+    PREPARE = 'Prepare' #готовиться
+    ORDER_IS_READY = 'Order is ready' #заказ готов
+    ORDER_IN_TRANSIT = 'Order in transit' #заказ в пути
+    ORDER_DELIVERED = 'Order delivered' #заказ доставлен
     STATUS_CHOICES = (
-        (0, ''),
+        (0, ORDER_IS_ACCEPTED),
+        (1, PREPARE),
+        (2, ORDER_IS_READY),
+        (3, ORDER_IN_TRANSIT),
+        (4, ORDER_DELIVERED)
     )
-    client = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='Order')
+    client = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='order')
     cafe = models.ManyToManyField('core.Cafe', related_name='orders')
     payment_method = models.PositiveSmallIntegerField(choices=PAYMENT_TYPE_CHOICES)
     rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
+    date = models.DateTimeField()
 
 
 class UserAddress(models.Model):
     address = AddressField()
+
+
+class Basket(models.Model):
+    foods = models.ManyToManyField('core.Food', related_name='basket')
