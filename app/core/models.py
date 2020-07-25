@@ -41,11 +41,11 @@ class Order(models.Model):
         (4, GOOD),
         (5, EXCELLENT)
     )
-    BY_CARD = 'By card'
-    BY_CASH = 'By cash'
+    BY_CARD = 0
+    BY_CASH = 1
     PAYMENT_TYPE_CHOICES = (
-        (0, BY_CARD),
-        (1, BY_CASH),
+        (BY_CARD, 'By card'),
+        (BY_CASH, 'By cash'),
     )
     ORDER_IS_ACCEPTED = 'Order is accepted' #заказ принят
     PREPARE = 'Prepare' #готовиться
