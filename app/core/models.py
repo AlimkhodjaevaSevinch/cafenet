@@ -9,6 +9,7 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     addresses = models.ManyToManyField('core.UserAddress', on_delete=models.CASCADE, related_name='users')
+    foods = models.ManyToManyField('core.Food', related_name='users', through='core.Basket')
 
 
 class CafeChain(models.Model):
@@ -17,7 +18,8 @@ class CafeChain(models.Model):
 
 class Cafe(models.Model):
     cafe_net = models.ForeignKey('core.CafeChain', on_delete=models.CASCADE, related_name='cafes')
-    working_hours = models.TimeField()
+    working_on = models.TimeField()
+    working_off = models.TimeField()
     address = AddressField()
 
 
@@ -28,42 +30,44 @@ class Food(models.Model):
 
 
 class Order(models.Model):
-    AWFUL = 'Awful' #ужасно
-    BAD = 'Bad'
-    NORMAL = 'Normal'
-    GOOD = 'Good'
-    EXCELLENT = 'Excellent'
+    AWFUL = 1
+    BAD = 2
+    NORMAL = 3
+    GOOD = 4
+    EXCELLENT = 5
 
     RATING_CHOICES = (
-        (1, AWFUL),
-        (2, BAD),
-        (3, NORMAL),
-        (4, GOOD),
-        (5, EXCELLENT)
+        (AWFUL, 'Awful'),
+        (BAD, 'Bad'),
+        (NORMAL, 'Normal'),
+        (GOOD, 'Good'),
+        (EXCELLENT, 'Excellent')
     )
     BY_CARD = 0
     BY_CASH = 1
     PAYMENT_TYPE_CHOICES = (
-        (BY_CARD, 'By card'),
-        (BY_CASH, 'By cash'),
+        (BY_CARD,'By card'),
+        (BY_CASH,'By cash'),
     )
-    ORDER_IS_ACCEPTED = 'Order is accepted' #заказ принят
-    PREPARE = 'Prepare' #готовиться
-    ORDER_IS_READY = 'Order is ready' #заказ готов
-    ORDER_IN_TRANSIT = 'Order in transit' #заказ в пути
-    ORDER_DELIVERED = 'Order delivered' #заказ доставлен
+    ORDER_IS_ACCEPTED = 0 #заказ принят
+    PREPARE = 1 #готовиться
+    ORDER_IS_READY = 2 #заказ готов
+    ORDER_IN_TRANSIT = 3 #заказ в пути
+    ORDER_DELIVERED = 4 #заказ доставлен
     STATUS_CHOICES = (
-        (0, ORDER_IS_ACCEPTED),
-        (1, PREPARE),
-        (2, ORDER_IS_READY),
-        (3, ORDER_IN_TRANSIT),
-        (4, ORDER_DELIVERED)
+        (ORDER_IS_ACCEPTED, 'Order is accepted'),
+        (PREPARE, 'Prepare'),
+        (ORDER_IS_READY, 'Order is ready'),
+        (ORDER_IN_TRANSIT, 'Order in transit'),
+        (ORDER_DELIVERED, 'Order delivered')
     )
-    client = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='order')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='orders')
     cafe = models.ManyToManyField('core.Cafe', related_name='orders')
     payment_method = models.PositiveSmallIntegerField(choices=PAYMENT_TYPE_CHOICES)
     rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
     date = models.DateTimeField()
+    status = models.PositiveSmallIntegerField()
+
 
 
 class UserAddress(models.Model):
@@ -71,4 +75,6 @@ class UserAddress(models.Model):
 
 
 class Basket(models.Model):
-    foods = models.ManyToManyField('core.Food', related_name='basket')
+    foods = models.ForeignKey('core.Food', on_delete=models.CASCADE, related_name='baskets')
+    user = models.ForeignKey('core.CustomUser', on_delete=models.CASCADE, related_name='basket')
+    quantity = models.PositiveSmallIntegerField()
