@@ -4,13 +4,12 @@ from address.models import AddressField
 from djmoney.models.fields import MoneyField
 from django.db import models
 
-# TODO: Basket model; Order Statuses, Rating, Date, Payment Methods; integrate MoneyField
-
 
 class CustomUser(AbstractUser):
     addresses = models.ManyToManyField('core.UserAddress', related_name='users')
     foods = models.ManyToManyField('core.Food', related_name='users', through='core.Basket')
-    phone = models.CharField(max_length=12)
+    phone = models.IntegerField(max_length=12)
+
 
 class CafeChain(models.Model):
     name = models.CharField(max_length=100)
@@ -46,8 +45,8 @@ class Order(models.Model):
     BY_CARD = 0
     BY_CASH = 1
     PAYMENT_TYPE_CHOICES = (
-        (BY_CARD,'By card'),
-        (BY_CASH,'By cash'),
+        (BY_CARD, 'By card'),
+        (BY_CASH, 'By cash'),
     )
     ORDER_IS_ACCEPTED = 0  # заказ принят
     PREPARE = 1  # готовиться
