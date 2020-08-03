@@ -4,8 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class SignUpForm(UserCreationForm):
-    birthday = forms.DateField(input_formats=("dd:MM:YYYY",))
-
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = ('username', 'email', 'first_name', 'last_name', 'phone')
