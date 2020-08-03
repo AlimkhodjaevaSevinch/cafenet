@@ -8,7 +8,7 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    addresses = models.ManyToManyField('core.UserAddress', on_delete=models.CASCADE, related_name='users')
+    addresses = models.ManyToManyField('core.UserAddress', related_name='users')
     foods = models.ManyToManyField('core.Food', related_name='users', through='core.Basket')
 
 
@@ -69,12 +69,11 @@ class Order(models.Model):
     status = models.PositiveSmallIntegerField()
 
 
-
 class UserAddress(models.Model):
     address = AddressField()
 
 
 class Basket(models.Model):
-    foods = models.ForeignKey('core.Food', on_delete=models.CASCADE, related_name='baskets')
-    user = models.ForeignKey('core.CustomUser', on_delete=models.CASCADE, related_name='basket')
+    food = models.ForeignKey('core.Food', on_delete=models.CASCADE, related_name='baskets')
+    custom_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='baskets')
     quantity = models.PositiveSmallIntegerField()
