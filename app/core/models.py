@@ -10,7 +10,7 @@ from django.db import models
 class CustomUser(AbstractUser):
     addresses = models.ManyToManyField('core.UserAddress', related_name='users')
     foods = models.ManyToManyField('core.Food', related_name='users', through='core.Basket')
-
+    phone = models.CharField(max_length=12)
 
 class CafeChain(models.Model):
     name = models.CharField(max_length=100)
@@ -49,11 +49,11 @@ class Order(models.Model):
         (BY_CARD,'By card'),
         (BY_CASH,'By cash'),
     )
-    ORDER_IS_ACCEPTED = 0 #заказ принят
-    PREPARE = 1 #готовиться
-    ORDER_IS_READY = 2 #заказ готов
-    ORDER_IN_TRANSIT = 3 #заказ в пути
-    ORDER_DELIVERED = 4 #заказ доставлен
+    ORDER_IS_ACCEPTED = 0  # заказ принят
+    PREPARE = 1  # готовиться
+    ORDER_IS_READY = 2  # заказ готов
+    ORDER_IN_TRANSIT = 3  # заказ в пути
+    ORDER_DELIVERED = 4  # заказ доставлен
     STATUS_CHOICES = (
         (ORDER_IS_ACCEPTED, 'Order is accepted'),
         (PREPARE, 'Prepare'),
