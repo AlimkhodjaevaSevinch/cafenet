@@ -1,5 +1,5 @@
 asgiref==3.2.10
-Django==3.0.8
+Django==3.0.14
 django-address==0.2.4
 django-debug-toolbar==2.2
 django-money==1.1
