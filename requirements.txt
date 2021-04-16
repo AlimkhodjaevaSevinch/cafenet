@@ -1,7 +1,7 @@
 asgiref==3.2.10
 Django==3.0.8
 django-address==0.2.4
-django-debug-toolbar==2.2
+django-debug-toolbar==2.2.1
 django-money==1.1
 py-moneyed==0.8.0
 pytz==2020.1
